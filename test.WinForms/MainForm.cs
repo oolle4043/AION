@@ -44,13 +44,15 @@ public sealed class MainForm : Form
         var statusPanel = new Panel
         {
             Dock = DockStyle.Right,
-            Width = 150
+            Width = 170,
+            Padding = new Padding(8, 4, 8, 4),
+            BackColor = Color.FromArgb(245, 246, 248)
         };
 
         _runStopButton = new Button { Text = "실행", Width = 90, Height = 30 };
         _runStopButton.Click += async (_, _) => await HandleRunStopClickAsync();
 
-        _installBrowserButton = new Button { Text = "필수패키지 설치", Width = 125, Height = 30 };
+        _installBrowserButton = new Button { Text = "필수패키지 설치", Width = 145, Height = 30 };
         _installBrowserButton.Click += async (_, _) => await InstallBrowserAsync();
 
         _manageTargetButton = new Button { Text = "추가/삭제", Width = 100, Height = 30 };
@@ -59,7 +61,7 @@ public sealed class MainForm : Form
         _settingsButton = new Button { Text = "설정", Width = 90, Height = 30 };
         _settingsButton.Click += (_, _) => OpenSettingsDialog();
 
-        _openListButton = new Button { Text = "레기온 리스트", Width = 110, Height = 30 };
+        _openListButton = new Button { Text = "레기온 리스트", Width = 125, Height = 30 };
         _openListButton.Click += (_, _) => OpenListFile();
 
         _openResultFolderButton = new Button { Text = "결과 폴더 열기", Width = 130, Height = 30 };
@@ -70,15 +72,15 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleCenter,
             Font = new Font("Segoe UI", 10, FontStyle.Bold),
-            BorderStyle = BorderStyle.FixedSingle
+            BorderStyle = BorderStyle.None
         };
 
         buttonPanel.Controls.Add(_runStopButton);
         buttonPanel.Controls.Add(_manageTargetButton);
         buttonPanel.Controls.Add(_openListButton);
+        buttonPanel.Controls.Add(_openResultFolderButton);
         buttonPanel.Controls.Add(_settingsButton);
         buttonPanel.Controls.Add(_installBrowserButton);
-        buttonPanel.Controls.Add(_openResultFolderButton);
 
         statusPanel.Controls.Add(_statusLabel);
         topContainer.Controls.Add(buttonPanel);
@@ -126,9 +128,9 @@ public sealed class MainForm : Form
         _openListButton.Enabled = true;
         _openResultFolderButton.Enabled = true;
 
-        _statusLabel.Text = "대기 중";
-        _statusLabel.BackColor = Color.FromArgb(232, 232, 232);
-        _statusLabel.ForeColor = Color.FromArgb(52, 52, 52);
+        _statusLabel.Text = "● 대기 중";
+        _statusLabel.BackColor = Color.FromArgb(238, 241, 245);
+        _statusLabel.ForeColor = Color.FromArgb(76, 88, 102);
     }
 
     private void ApplyRunningUiState()
@@ -144,9 +146,9 @@ public sealed class MainForm : Form
         _openListButton.Enabled = false;
         _openResultFolderButton.Enabled = false;
 
-        _statusLabel.Text = "실행 중";
-        _statusLabel.BackColor = Color.FromArgb(214, 245, 214);
-        _statusLabel.ForeColor = Color.FromArgb(24, 97, 28);
+        _statusLabel.Text = "● 실행 중";
+        _statusLabel.BackColor = Color.FromArgb(225, 246, 231);
+        _statusLabel.ForeColor = Color.FromArgb(35, 122, 62);
     }
 
     private void ApplyBusyUiState(string statusText)
@@ -162,9 +164,9 @@ public sealed class MainForm : Form
         _openListButton.Enabled = false;
         _openResultFolderButton.Enabled = false;
 
-        _statusLabel.Text = statusText;
-        _statusLabel.BackColor = Color.FromArgb(255, 236, 204);
-        _statusLabel.ForeColor = Color.FromArgb(122, 67, 0);
+        _statusLabel.Text = $"● {statusText}";
+        _statusLabel.BackColor = Color.FromArgb(255, 242, 217);
+        _statusLabel.ForeColor = Color.FromArgb(138, 88, 24);
     }
 
     private async Task RunCollectorAsync()
