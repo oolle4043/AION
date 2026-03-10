@@ -4,6 +4,7 @@
 # build outputs
 bin/
 obj/
+publish/
 
 # any nested build outputs
 **/bin/

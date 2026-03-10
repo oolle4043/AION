@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Drawing.Drawing2D;
 using Microsoft.Data.Sqlite;
 
 namespace Test.WinForms;
@@ -17,14 +18,15 @@ public sealed class MainForm : Form
     private readonly Button _openListButton;
     private readonly Button _openResultFolderButton;
     private readonly TextBox _logBox;
-    private readonly Label _statusLabel;
+    private readonly Button _statusButton;
     private Process? _runningProcess;
 
     public MainForm()
     {
-        Text = "파괴 아툴 기록";
-        Width = 900;
-        Height = 650;
+        Text = "파괴 아툴 수집기";
+        Width = 1020;
+        Height = 700;
+        MinimumSize = new Size(980, 620);
         StartPosition = FormStartPosition.CenterScreen;
 
         var topContainer = new Panel
@@ -44,16 +46,17 @@ public sealed class MainForm : Form
         var statusPanel = new Panel
         {
             Dock = DockStyle.Right,
-            Width = 170,
-            Padding = new Padding(8, 4, 8, 4),
+            Width = 190,
+            Padding = new Padding(20, 4, 8, 4),
             BackColor = Color.FromArgb(245, 246, 248)
         };
 
         _runStopButton = new Button { Text = "실행", Width = 90, Height = 30 };
         _runStopButton.Click += async (_, _) => await HandleRunStopClickAsync();
 
-        _installBrowserButton = new Button { Text = "필수패키지 설치", Width = 145, Height = 30 };
+        _installBrowserButton = new Button { Text = "필수패키지 설치", Width = 158, Height = 30 };
         _installBrowserButton.Click += async (_, _) => await InstallBrowserAsync();
+        _installBrowserButton.Margin = new Padding(3, 3, 16, 3);
 
         _manageTargetButton = new Button { Text = "추가/삭제", Width = 100, Height = 30 };
         _manageTargetButton.Click += async (_, _) => await ManageTargetAsync();
@@ -67,13 +70,19 @@ public sealed class MainForm : Form
         _openResultFolderButton = new Button { Text = "결과 폴더 열기", Width = 130, Height = 30 };
         _openResultFolderButton.Click += (_, _) => OpenResultFolder();
 
-        _statusLabel = new Label
+        _statusButton = new Button
         {
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleCenter,
             Font = new Font("Segoe UI", 10, FontStyle.Bold),
-            BorderStyle = BorderStyle.None
+            TabStop = false,
+            UseVisualStyleBackColor = false,
+            FlatStyle = FlatStyle.Flat,
+            Cursor = Cursors.Default
         };
+        _statusButton.FlatAppearance.BorderSize = 0;
+        _statusButton.BackColor = statusPanel.BackColor;
+        _statusButton.Click += (_, _) => { };
 
         buttonPanel.Controls.Add(_runStopButton);
         buttonPanel.Controls.Add(_manageTargetButton);
@@ -82,9 +91,27 @@ public sealed class MainForm : Form
         buttonPanel.Controls.Add(_settingsButton);
         buttonPanel.Controls.Add(_installBrowserButton);
 
-        statusPanel.Controls.Add(_statusLabel);
+        statusPanel.Controls.Add(_statusButton);
         topContainer.Controls.Add(buttonPanel);
         topContainer.Controls.Add(statusPanel);
+
+        var footerPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 24,
+            BackColor = Color.FromArgb(246, 246, 248),
+            Padding = new Padding(0, 2, 8, 2)
+        };
+        var authorLabel = new Label
+        {
+            Dock = DockStyle.Right,
+            AutoSize = true,
+            Text = "Made by CJJ",
+            Font = new Font("Segoe UI", 8.5f, FontStyle.Italic),
+            ForeColor = Color.FromArgb(112, 112, 120),
+            TextAlign = ContentAlignment.MiddleRight
+        };
+        footerPanel.Controls.Add(authorLabel);
 
         _logBox = new TextBox
         {
@@ -93,14 +120,30 @@ public sealed class MainForm : Form
             ScrollBars = ScrollBars.Both,
             ReadOnly = true,
             Font = new Font("Consolas", 10),
-            WordWrap = false
+            WordWrap = false,
+            BorderStyle = BorderStyle.FixedSingle,
+            TabStop = false
         };
 
         Controls.Add(_logBox);
+        Controls.Add(footerPanel);
         Controls.Add(topContainer);
 
         AppendLog("UI 준비 완료");
         AppendLog($"실행 폴더: {AppContext.BaseDirectory}");
+
+        AppendLog("================================================");
+        AppendLog("[ 사용법 ]");
+        AppendLog("================================================");
+        AppendLog("01) 실행 버튼     : 시작/중지");
+        AppendLog("02) 추가/삭제     : 닉네임 단건 추가 또는 삭제");
+        AppendLog("03) 레기온 리스트  : 레기온 맴버 닉네임(list.txt) 관리");
+        AppendLog("04) 결과 폴더 열기 : 최신 엑셀 결과 확인");
+        AppendLog("05) 설정         : 서버코드 / 최대 검색 엔진 개수 변경");
+        AppendLog("06) 필수패키지 설치 : 최초 1회 필수 실행");
+        AppendLog("07) 상태창        : 실행중 또는 대기중 표시   ");
+        AppendLog("================================================");
+
         ApplyIdleUiState();
     }
 
@@ -128,9 +171,8 @@ public sealed class MainForm : Form
         _openListButton.Enabled = true;
         _openResultFolderButton.Enabled = true;
 
-        _statusLabel.Text = "● 대기 중";
-        _statusLabel.BackColor = Color.FromArgb(238, 241, 245);
-        _statusLabel.ForeColor = Color.FromArgb(76, 88, 102);
+        _statusButton.Text = "● 대기 중";
+        _statusButton.ForeColor = Color.FromArgb(76, 88, 102);
     }
 
     private void ApplyRunningUiState()
@@ -146,9 +188,8 @@ public sealed class MainForm : Form
         _openListButton.Enabled = false;
         _openResultFolderButton.Enabled = false;
 
-        _statusLabel.Text = "● 실행 중";
-        _statusLabel.BackColor = Color.FromArgb(225, 246, 231);
-        _statusLabel.ForeColor = Color.FromArgb(35, 122, 62);
+        _statusButton.Text = "● 실행 중";
+        _statusButton.ForeColor = Color.FromArgb(35, 122, 62);
     }
 
     private void ApplyBusyUiState(string statusText)
@@ -164,9 +205,8 @@ public sealed class MainForm : Form
         _openListButton.Enabled = false;
         _openResultFolderButton.Enabled = false;
 
-        _statusLabel.Text = $"● {statusText}";
-        _statusLabel.BackColor = Color.FromArgb(255, 242, 217);
-        _statusLabel.ForeColor = Color.FromArgb(138, 88, 24);
+        _statusButton.Text = $"● {statusText}";
+        _statusButton.ForeColor = Color.FromArgb(138, 88, 24);
     }
 
     private async Task RunCollectorAsync()
@@ -244,28 +284,19 @@ public sealed class MainForm : Form
             return;
         }
 
-        TargetAction? action = PromptTargetAction();
-        if (action is null)
+        TargetCommandInput? commandInput = PromptTargetCommand();
+        if (commandInput is null)
         {
             return;
         }
 
-        bool isAdd = action == TargetAction.Add;
-        string title = isAdd ? "추가할 닉네임" : "삭제할 닉네임";
-        string? nickname = PromptNickname(title);
-        if (string.IsNullOrWhiteSpace(nickname))
+        if (commandInput.Action == TargetAction.Add)
         {
-            AppendLog("닉네임 입력이 비어 작업을 취소했습니다.");
+            await ExecuteTargetCommandAsync("--add-target", commandInput.Nickname, "추가/조회 중", "대상 추가 및 단건 조회");
             return;
         }
 
-        if (isAdd)
-        {
-            await ExecuteTargetCommandAsync("--add-target", nickname.Trim(), "추가/조회 중", "대상 추가 및 단건 조회");
-            return;
-        }
-
-        await ExecuteTargetCommandAsync("--remove-target", nickname.Trim(), "삭제 중", "대상 삭제");
+        await ExecuteTargetCommandAsync("--remove-target", commandInput.Nickname, "삭제 중", "대상 삭제");
     }
 
     private async Task ExecuteTargetCommandAsync(
@@ -530,7 +561,7 @@ public sealed class MainForm : Form
         }
 
         string projectPath = Path.Combine(projectDir, "test.csproj");
-        AppendLog("수집기 실행 방식: dotnet run (개발 모드)");
+
         return new ProcessStartInfo
         {
             FileName = "dotnet",
@@ -634,33 +665,80 @@ public sealed class MainForm : Form
         };
     }
 
-    private static TargetAction? PromptTargetAction()
+    private static TargetCommandInput? PromptTargetCommand()
     {
         using var dialog = new Form
         {
-            Text = "추가/삭제 선택",
-            Width = 360,
-            Height = 140,
+            Text = "추가/삭제",
+            Width = 430,
+            Height = 220,
             FormBorderStyle = FormBorderStyle.FixedDialog,
             StartPosition = FormStartPosition.CenterParent,
             MaximizeBox = false,
             MinimizeBox = false
         };
 
-        var addButton = new Button { Text = "추가", Left = 36, Top = 40, Width = 80 };
-        var removeButton = new Button { Text = "삭제", Left = 134, Top = 40, Width = 80 };
-        var cancelButton = new Button { Text = "취소", Left = 232, Top = 40, Width = 80 };
+        var titleLabel = new Label
+        {
+            Left = 20,
+            Top = 20,
+            Width = 380,
+            Height = 20,
+            Text = "닉네임 입력",
+            Font = new Font("Segoe UI", 9, FontStyle.Bold),
+            ForeColor = Color.FromArgb(64, 64, 64)
+        };
+        var nicknameTextBox = new TextBox
+        {
+            Left = 20,
+            Top = 50,
+            Width = 380,
+            Height = 30,
+            Font = new Font("Segoe UI", 11, FontStyle.Regular)
+        };
 
-        TargetAction? selected = null;
+        var buttonPanel = new Panel
+        {
+            Left = 20,
+            Top = 112,
+            Width = 380,
+            Height = 44
+        };
+
+        var addButton = new Button { Text = "추가", Left = 68, Top = 6, Width = 78, Height = 30 };
+        var removeButton = new Button { Text = "삭제", Left = 151, Top = 6, Width = 78, Height = 30 };
+        var cancelButton = new Button { Text = "취소", Left = 234, Top = 6, Width = 78, Height = 30 };
+
+        addButton.UseVisualStyleBackColor = true;
+        removeButton.UseVisualStyleBackColor = true;
+        cancelButton.UseVisualStyleBackColor = true;
+
+        TargetCommandInput? selected = null;
         addButton.Click += (_, _) =>
         {
-            selected = TargetAction.Add;
+            string nickname = nicknameTextBox.Text.Trim();
+            if (nickname.Length == 0)
+            {
+                MessageBox.Show("닉네임을 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                nicknameTextBox.Focus();
+                return;
+            }
+
+            selected = new TargetCommandInput(TargetAction.Add, nickname);
             dialog.DialogResult = DialogResult.OK;
             dialog.Close();
         };
         removeButton.Click += (_, _) =>
         {
-            selected = TargetAction.Remove;
+            string nickname = nicknameTextBox.Text.Trim();
+            if (nickname.Length == 0)
+            {
+                MessageBox.Show("닉네임을 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                nicknameTextBox.Focus();
+                return;
+            }
+
+            selected = new TargetCommandInput(TargetAction.Remove, nickname);
             dialog.DialogResult = DialogResult.OK;
             dialog.Close();
         };
@@ -670,66 +748,43 @@ public sealed class MainForm : Form
             dialog.Close();
         };
 
-        dialog.Controls.Add(addButton);
-        dialog.Controls.Add(removeButton);
-        dialog.Controls.Add(cancelButton);
+        buttonPanel.Controls.Add(addButton);
+        buttonPanel.Controls.Add(removeButton);
+        buttonPanel.Controls.Add(cancelButton);
+
+        dialog.Controls.Add(titleLabel);
+        dialog.Controls.Add(nicknameTextBox);
+        dialog.Controls.Add(buttonPanel);
+        dialog.AcceptButton = addButton;
         dialog.CancelButton = cancelButton;
+        dialog.Shown += (_, _) =>
+        {
+            ApplyRoundedRegion(nicknameTextBox, 8);
+            nicknameTextBox.Focus();
+        };
 
         return dialog.ShowDialog() == DialogResult.OK ? selected : null;
     }
-
-    private static string? PromptNickname(string title)
+    private static void ApplyRoundedRegion(Control control, int radius)
     {
-        using var dialog = new Form
-        {
-            Text = title,
-            Width = 380,
-            Height = 150,
-            FormBorderStyle = FormBorderStyle.FixedDialog,
-            StartPosition = FormStartPosition.CenterParent,
-            MaximizeBox = false,
-            MinimizeBox = false
-        };
-
-        var textBox = new TextBox
-        {
-            Left = 16,
-            Top = 16,
-            Width = 330
-        };
-
-        var okButton = new Button
-        {
-            Text = "확인",
-            Left = 190,
-            Top = 52,
-            Width = 75,
-            DialogResult = DialogResult.OK
-        };
-
-        var cancelButton = new Button
-        {
-            Text = "취소",
-            Left = 271,
-            Top = 52,
-            Width = 75,
-            DialogResult = DialogResult.Cancel
-        };
-
-        dialog.Controls.Add(textBox);
-        dialog.Controls.Add(okButton);
-        dialog.Controls.Add(cancelButton);
-        dialog.AcceptButton = okButton;
-        dialog.CancelButton = cancelButton;
-
-        return dialog.ShowDialog() == DialogResult.OK ? textBox.Text : null;
+        int diameter = radius * 2;
+        var rect = new Rectangle(0, 0, control.Width, control.Height);
+        using var path = new GraphicsPath();
+        path.StartFigure();
+        path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+        path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+        path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+        path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+        path.CloseFigure();
+        control.Region = new Region(path);
     }
-
     private enum TargetAction
     {
         Add,
         Remove
     }
+
+    private sealed record TargetCommandInput(TargetAction Action, string Nickname);
 
     private void StopCollector()
     {
@@ -814,3 +869,4 @@ public sealed class MainForm : Form
 
     private sealed record SysSettings(int DefaultServerId, int MaxConcurrency);
 }
+
