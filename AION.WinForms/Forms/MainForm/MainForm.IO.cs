@@ -3,7 +3,7 @@ using System.Text;
 using System.Drawing.Drawing2D;
 using Microsoft.Data.Sqlite;
 
-namespace Test.WinForms;
+namespace AION.WinForms;
 
 public sealed partial class MainForm : Form
 {
@@ -60,7 +60,7 @@ public sealed partial class MainForm : Form
 
         for (int i = 0; i < 10; i++)
         {
-            if (File.Exists(Path.Combine(current, "test.csproj")))
+            if (File.Exists(Path.Combine(current, "AION.Collector.csproj")))
             {
                 return current;
             }
@@ -90,3 +90,4 @@ public sealed partial class MainForm : Form
 
     private sealed record SysSettings(int DefaultServerId, int MaxConcurrency);
 }
+

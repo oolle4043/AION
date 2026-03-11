@@ -3,7 +3,7 @@ using System.Text;
 using System.Drawing.Drawing2D;
 using Microsoft.Data.Sqlite;
 
-namespace Test.WinForms;
+namespace AION.WinForms;
 
 public sealed partial class MainForm : Form
 {
@@ -209,4 +209,5 @@ public sealed partial class MainForm : Form
         _statusButton.ForeColor = Color.FromArgb(138, 88, 24);
     }
 }
+
 

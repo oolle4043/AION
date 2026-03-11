@@ -3,7 +3,7 @@ using System.Text;
 using System.Drawing.Drawing2D;
 using Microsoft.Data.Sqlite;
 
-namespace Test.WinForms;
+namespace AION.WinForms;
 
 public sealed partial class MainForm : Form
 {
@@ -128,3 +128,4 @@ public sealed partial class MainForm : Form
 
     private sealed record TargetCommandInput(TargetAction Action, string Nickname);
 }
+

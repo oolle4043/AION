@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Test.WinForms;
+namespace AION.WinForms;
 
 internal static class Program
 {
@@ -12,3 +12,4 @@ internal static class Program
         Application.Run(new MainForm());
     }
 }
+

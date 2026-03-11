@@ -3,7 +3,7 @@ using System.Text;
 using System.Drawing.Drawing2D;
 using Microsoft.Data.Sqlite;
 
-namespace Test.WinForms;
+namespace AION.WinForms;
 
 public sealed partial class MainForm : Form
 {
@@ -237,7 +237,7 @@ public sealed partial class MainForm : Form
             return null;
         }
 
-        string projectPath = Path.Combine(projectDir, "test.csproj");
+        string projectPath = Path.Combine(projectDir, "AION.Collector.csproj");
 
         return new ProcessStartInfo
         {
@@ -281,7 +281,7 @@ public sealed partial class MainForm : Form
             return null;
         }
 
-        string projectPath = Path.Combine(projectDir, "test.csproj");
+        string projectPath = Path.Combine(projectDir, "AION.Collector.csproj");
         AppendLog("브라우저 설치 방식: dotnet run (개발 모드)");
         return new ProcessStartInfo
         {
@@ -326,7 +326,7 @@ public sealed partial class MainForm : Form
             return null;
         }
 
-        string projectPath = Path.Combine(projectDir, "test.csproj");
+        string projectPath = Path.Combine(projectDir, "AION.Collector.csproj");
         AppendLog("대상 명령 실행 방식: dotnet run (개발 모드)");
         return new ProcessStartInfo
         {
@@ -342,3 +342,4 @@ public sealed partial class MainForm : Form
         };
     }
 }
+

@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="test.WinForms\**\*.cs" />
-    <None Remove="test.WinForms\**\*" />
-    <EmbeddedResource Remove="test.WinForms\**\*" />
+    <Compile Remove="AION.WinForms\\**\\*.cs" />
+    <None Remove="AION.WinForms\\**\\*" />
+    <EmbeddedResource Remove="AION.WinForms\\**\\*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,4 +29,5 @@
     </Content>
   </ItemGroup>
 </Project>
+
 
