@@ -91,7 +91,7 @@ partial class Program
             string nickname = await GetText(page, "#result-nickname");
             string job = await GetText(page, "#result-job");
             string power = await GetText(page, "#result-combat-power");
-            string score = await GetText(page, "#dps-score-value");
+            string score = await GetText(page, "#combat-power-main-value");
 
             return new CharacterResult(target.ServerId, target.Name, nickname, job, power, score, "");
         }

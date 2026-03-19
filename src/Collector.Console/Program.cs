@@ -123,7 +123,7 @@ partial class Program
                 Console.WriteLine($"닉네임: {result.Nickname}");
                 Console.WriteLine($"직업: {result.Job}");
                 Console.WriteLine($"전투력: {result.Power}");
-                Console.WriteLine($"아툴 점수: {result.Score}");
+                Console.WriteLine($"파괴 리스트 점수: {result.Score}");
             }
         }
         catch (Exception ex)
