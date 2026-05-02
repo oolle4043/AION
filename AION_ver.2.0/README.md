@@ -1,6 +1,4 @@
-# AION
-
-# 파괴 아툴 수집기
+﻿# 파괴 아툴 수집기
 AION2 나니아서버 파괴 레기온 전투력, 아툴 측정기
 
 ## 디렉터리 구조
@@ -52,10 +50,7 @@ $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
 dotnet build .\AION.WinForms\AION.WinForms.csproj -c Debug -p:UseSharedCompilation=false
 ```
 
-- `AION_ver.1.0`
-  - 기존 WinForms 기반 버전
-  - WPF 전환 전 마지막 구조와 코드를 보관
+## 참고
+곧 내부 전투력 시스템이 도입됨에 따라 추후 해당 버전으로 변경 예정
 
-- `AION_ver.2.0`
-  - WPF 전환 버전
-  - 기존 기능을 유지하면서 WPF 실행 프로젝트를 추가한 최신 구조
+

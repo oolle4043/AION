@@ -1,0 +1,15 @@
+# dotnet cache
+.dotnet_home/
+
+# build outputs
+bin/
+obj/
+publish/
+
+# any nested build outputs
+**/bin/
+**/obj/
+
+# publish outputs
+파괴아툴수집기/
+결과/
