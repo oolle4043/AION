@@ -24,25 +24,25 @@ public sealed partial class MainWindow : Window
         var dialog = new Window
         {
             Title = "설정",
-            Width = 360,
-            Height = 190,
-            ResizeMode = ResizeMode.NoResize,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Owner = this,
-            Background = Brushes.White
+            Width = 380,
+            Height = 220
         };
 
-        var root = new Grid { Margin = new Thickness(16) };
+        var root = CreateDarkDialogContent(dialog, "설정");
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(130) });
+        root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(132) });
         root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-        var serverLabel = new TextBlock { Text = "서버코드", VerticalAlignment = VerticalAlignment.Center };
+        var serverLabel = CreateDialogLabel("서버코드 (나니아: 1010)");
         var serverTextBox = new TextBox { Text = current.DefaultServerId.ToString(), Margin = new Thickness(8, 0, 0, 0) };
-        var concurrencyLabel = new TextBlock { Text = "최대 검색 엔진 개수", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 16, 0, 0) };
-        var concurrencyTextBox = new TextBox { Text = current.MaxConcurrency.ToString(), Margin = new Thickness(8, 16, 0, 0) };
+        ApplyDialogTextBoxStyle(serverTextBox);
+
+        var concurrencyLabel = CreateDialogLabel("최대 검색 엔진 개수");
+        concurrencyLabel.Margin = new Thickness(0, 14, 0, 0);
+        var concurrencyTextBox = new TextBox { Text = current.MaxConcurrency.ToString(), Margin = new Thickness(8, 14, 0, 0) };
+        ApplyDialogTextBoxStyle(concurrencyTextBox);
 
         Grid.SetRow(serverLabel, 0);
         Grid.SetColumn(serverLabel, 0);
@@ -57,11 +57,13 @@ public sealed partial class MainWindow : Window
         {
             Orientation = Orientation.Horizontal,
             HorizontalAlignment = HorizontalAlignment.Right,
-            Margin = new Thickness(0, 20, 0, 0)
+            Margin = new Thickness(0, 22, 0, 0)
         };
 
-        var okButton = new Button { Content = "확인", Width = 75, Margin = new Thickness(0, 0, 6, 0), IsDefault = true };
-        var cancelButton = new Button { Content = "취소", Width = 75, IsCancel = true };
+        var okButton = new Button { Content = "확인", Width = 78, Margin = new Thickness(0, 0, 7, 0), IsDefault = true };
+        var cancelButton = new Button { Content = "취소", Width = 78, IsCancel = true };
+        ApplyDialogButtonStyle(okButton, true);
+        ApplyDialogButtonStyle(cancelButton);
 
         okButton.Click += (_, _) =>
         {
@@ -95,7 +97,6 @@ public sealed partial class MainWindow : Window
         root.Children.Add(concurrencyLabel);
         root.Children.Add(concurrencyTextBox);
         root.Children.Add(buttonPanel);
-        dialog.Content = root;
         dialog.ShowDialog();
     }
 

@@ -14,30 +14,21 @@ public sealed partial class MainWindow : Window
         {
             Title = "추가/삭제",
             Width = 430,
-            Height = 220,
-            ResizeMode = ResizeMode.NoResize,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Owner = this,
-            Background = Brushes.White
+            Height = 220
         };
 
-        var root = new Grid { Margin = new Thickness(20) };
+        var root = CreateDarkDialogContent(dialog, "추가/삭제");
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
-        var titleLabel = new TextBlock
-        {
-            Text = "닉네임 입력",
-            FontWeight = FontWeights.Bold,
-            Foreground = CreateBrush("#404040")
-        };
+        var titleLabel = CreateDialogLabel("닉네임 입력");
 
         var nicknameTextBox = new TextBox
         {
-            Margin = new Thickness(0, 12, 0, 0),
-            FontSize = 14
+            Margin = new Thickness(0, 12, 0, 0)
         };
+        ApplyDialogTextBoxStyle(nicknameTextBox);
 
         var buttonPanel = new StackPanel
         {
@@ -46,9 +37,12 @@ public sealed partial class MainWindow : Window
             Margin = new Thickness(0, 24, 0, 0)
         };
 
-        var addButton = new Button { Content = "추가", Width = 78, Margin = new Thickness(0, 0, 6, 0), IsDefault = true };
-        var removeButton = new Button { Content = "삭제", Width = 78, Margin = new Thickness(0, 0, 6, 0) };
+        var addButton = new Button { Content = "추가", Width = 78, Margin = new Thickness(0, 0, 7, 0), IsDefault = true };
+        var removeButton = new Button { Content = "삭제", Width = 78, Margin = new Thickness(0, 0, 7, 0) };
         var cancelButton = new Button { Content = "취소", Width = 78, IsCancel = true };
+        ApplyDialogButtonStyle(addButton, true);
+        ApplyDialogButtonStyle(removeButton);
+        ApplyDialogButtonStyle(cancelButton);
 
         TargetCommandInput? selected = null;
 
@@ -81,7 +75,6 @@ public sealed partial class MainWindow : Window
         root.Children.Add(titleLabel);
         root.Children.Add(nicknameTextBox);
         root.Children.Add(buttonPanel);
-        dialog.Content = root;
         dialog.Loaded += (_, _) => nicknameTextBox.Focus();
 
         return dialog.ShowDialog() == true ? selected : null;
@@ -100,14 +93,10 @@ public sealed partial class MainWindow : Window
         {
             Title = "비교 기준 선택",
             Width = 520,
-            Height = 390,
-            ResizeMode = ResizeMode.NoResize,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Owner = this,
-            Background = Brushes.White
+            Height = 390
         };
 
-        var root = new Grid { Margin = new Thickness(20) };
+        var root = CreateDarkDialogContent(dialog, "비교 기준 선택");
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -118,27 +107,49 @@ public sealed partial class MainWindow : Window
         var dbRadio = new RadioButton
         {
             Content = "DB와 비교",
-            IsChecked = true
+            IsChecked = true,
+            Foreground = CreateBrush("#D9E5F4"),
+            FontSize = 12,
+            FontWeight = FontWeights.Bold
         };
 
         var excelRadio = new RadioButton
         {
             Content = "결과 엑셀과 비교",
-            Margin = new Thickness(0, 8, 0, 0)
+            Margin = new Thickness(0, 8, 0, 0),
+            Foreground = CreateBrush("#D9E5F4"),
+            FontSize = 12,
+            FontWeight = FontWeights.Bold,
+            IsEnabled = excelPaths.Count > 0
         };
 
         var guideLabel = new TextBlock
         {
             Margin = new Thickness(0, 16, 0, 0),
-            Text = "결과 엑셀 비교를 선택하면 아래 목록에서 기준 파일을 선택하세요."
+            Text = "결과 엑셀 비교를 선택하면 아래 목록에서 기준 파일을 선택하세요.",
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = excelPaths.Count > 0 ? CreateBrush("#AFC0D6") : CreateBrush("#6F7F94"),
+            FontSize = 12
         };
 
         var excelList = new ListBox
         {
             Margin = new Thickness(0, 12, 0, 0),
             MinHeight = 180,
-            IsEnabled = false
+            IsEnabled = false,
+            Background = CreateBrush("#1C2A3A"),
+            BorderBrush = CreateBrush("#405268"),
+            BorderThickness = new Thickness(1),
+            Foreground = CreateBrush("#D9E5F4"),
+            FontSize = 11,
+            Padding = new Thickness(4)
         };
+        excelList.Template = CreateDarkListBoxTemplate();
+        excelList.ItemContainerStyle = CreateDarkListBoxItemStyle();
+        excelList.Resources.Add(SystemColors.ControlBrushKey, CreateBrush("#1C2A3A"));
+        excelList.Resources.Add(SystemColors.ControlTextBrushKey, CreateBrush("#D9E5F4"));
+        excelList.Resources.Add(SystemColors.WindowBrushKey, CreateBrush("#1C2A3A"));
+        excelList.Resources.Add(SystemColors.GrayTextBrushKey, CreateBrush("#9EADC2"));
 
         foreach (string excelPath in excelPaths)
         {
@@ -153,7 +164,8 @@ public sealed partial class MainWindow : Window
         var emptyLabel = new TextBlock
         {
             Margin = new Thickness(0, 8, 0, 0),
-            Foreground = CreateBrush("#A04040"),
+            Foreground = CreateBrush("#F07F86"),
+            FontSize = 12,
             Text = excelPaths.Count == 0 ? "결과 폴더에 비교 가능한 엑셀이 없습니다. DB 비교만 사용할 수 있습니다." : ""
         };
 
@@ -164,13 +176,17 @@ public sealed partial class MainWindow : Window
             Margin = new Thickness(0, 14, 0, 0)
         };
 
-        var okButton = new Button { Content = "실행", Width = 75, Margin = new Thickness(0, 0, 6, 0), IsDefault = true };
-        var cancelButton = new Button { Content = "취소", Width = 75, IsCancel = true };
+        var okButton = new Button { Content = "실행", Width = 78, Margin = new Thickness(0, 0, 7, 0), IsDefault = true };
+        var cancelButton = new Button { Content = "취소", Width = 78, IsCancel = true };
+        ApplyDialogButtonStyle(okButton, true);
+        ApplyDialogButtonStyle(cancelButton);
 
         void ApplySelectionState()
         {
             bool useExcel = excelRadio.IsChecked == true;
             excelList.IsEnabled = useExcel && excelPaths.Count > 0;
+            excelRadio.Foreground = excelPaths.Count > 0 ? CreateBrush("#D9E5F4") : CreateBrush("#6F7F94");
+            guideLabel.Foreground = excelPaths.Count > 0 ? CreateBrush("#AFC0D6") : CreateBrush("#6F7F94");
         }
 
         dbRadio.Checked += (_, _) => ApplySelectionState();
@@ -221,7 +237,6 @@ public sealed partial class MainWindow : Window
         root.Children.Add(excelList);
         root.Children.Add(emptyLabel);
         root.Children.Add(buttonPanel);
-        dialog.Content = root;
         dialog.Loaded += (_, _) => ApplySelectionState();
 
         return dialog.ShowDialog() == true ? selected : null;

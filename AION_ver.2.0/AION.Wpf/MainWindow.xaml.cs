@@ -24,13 +24,12 @@ public sealed partial class MainWindow : Window
         AppendLog("================================================");
         AppendLog("[ 사용법 ]");
         AppendLog("================================================");
-        AppendLog("01) 실행 버튼     : 시작/중지");
-        AppendLog("02) 추가/삭제     : 닉네임 단건 추가 또는 삭제");
-        AppendLog("03) 레기온 리스트  : 레기온 맴버 닉네임(list.txt) 관리");
-        AppendLog("04) 결과 폴더 열기 : 최신 엑셀 결과 확인");
-        AppendLog("05) 설정         : 서버코드 / 최대 검색 엔진 개수 변경");
-        AppendLog("06) 필수패키지 설치 : 최초 1회 필수 실행");
-        AppendLog("07) 상태창        : 실행중 또는 대기중 표시");
+        AppendLog("01) 실행 버튼        : 시작/중지");
+        AppendLog("02) 추가/삭제        : 닉네임 단건 추가 또는 삭제");
+        AppendLog("03) 레기온 리스트    : 레기온 맴버 닉네임(list.txt) 관리");
+        AppendLog("04) 결과 폴더 열기   : 최신 엑셀 결과 확인");
+        AppendLog("05) 설정            : 서버코드 / 최대 검색 엔진 개수 변경");
+        AppendLog("06) 패키지          : 최초 1회 필수 실행");
         AppendLog("================================================");
 
         ApplyIdleUiState();
@@ -72,11 +71,24 @@ public sealed partial class MainWindow : Window
         OpenResultFolder();
     }
 
+    private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
     private void ApplyIdleUiState()
     {
         RunStopButton.Content = "실행";
         RunStopButton.IsEnabled = true;
-        RunStopButton.Background = CreateBrush("#DBEEFF");
+        RunStopButton.Style = (Style)FindResource("PrimaryButtonStyle");
+        RunStopButton.Background = CreateBrush("#35C47E");
+        RunStopButton.BorderBrush = CreateBrush("#61D99E");
+        RunStopButton.Foreground = CreateBrush("#092115");
 
         InstallBrowserButton.IsEnabled = true;
         ManageTargetButton.IsEnabled = true;
@@ -85,14 +97,17 @@ public sealed partial class MainWindow : Window
         OpenResultFolderButton.IsEnabled = true;
 
         StatusTextBlock.Text = "● 대기 중";
-        StatusTextBlock.Foreground = CreateBrush("#4C5866");
+        StatusTextBlock.Foreground = CreateBrush("#DDA64E");
     }
 
     private void ApplyRunningUiState()
     {
         RunStopButton.Content = "중지";
         RunStopButton.IsEnabled = true;
-        RunStopButton.Background = CreateBrush("#FFD7D7");
+        RunStopButton.Style = (Style)FindResource("StopButtonStyle");
+        RunStopButton.Background = CreateBrush("#F07F86");
+        RunStopButton.BorderBrush = CreateBrush("#F7A0A5");
+        RunStopButton.Foreground = CreateBrush("#2B080B");
 
         InstallBrowserButton.IsEnabled = false;
         ManageTargetButton.IsEnabled = false;
@@ -101,14 +116,17 @@ public sealed partial class MainWindow : Window
         OpenResultFolderButton.IsEnabled = false;
 
         StatusTextBlock.Text = "● 실행 중";
-        StatusTextBlock.Foreground = CreateBrush("#237A3E");
+        StatusTextBlock.Foreground = CreateBrush("#69D1A5");
     }
 
     private void ApplyBusyUiState(string statusText)
     {
         RunStopButton.Content = "실행";
         RunStopButton.IsEnabled = false;
-        RunStopButton.Background = CreateBrush("#DBEEFF");
+        RunStopButton.Style = (Style)FindResource("PrimaryButtonStyle");
+        RunStopButton.Background = CreateBrush("#35C47E");
+        RunStopButton.BorderBrush = CreateBrush("#61D99E");
+        RunStopButton.Foreground = CreateBrush("#092115");
 
         InstallBrowserButton.IsEnabled = false;
         ManageTargetButton.IsEnabled = false;
@@ -117,7 +135,7 @@ public sealed partial class MainWindow : Window
         OpenResultFolderButton.IsEnabled = false;
 
         StatusTextBlock.Text = $"● {statusText}";
-        StatusTextBlock.Foreground = CreateBrush("#8A5818");
+        StatusTextBlock.Foreground = CreateBrush("#E7BE61");
     }
 
     private static SolidColorBrush CreateBrush(string hex)
