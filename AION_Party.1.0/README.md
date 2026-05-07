@@ -20,7 +20,7 @@
 ## 실행
 
 ```powershell
-dotnet run --project .\AION.Party.csproj
+AION.Party.exe
 ```
 
 또는 배포 파일을 만든 뒤 실행합니다.
