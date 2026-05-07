@@ -1,56 +1,7 @@
-﻿# 파괴 아툴 수집기
-AION2 나니아서버 파괴 레기온 전투력, 아툴 측정기
+# AION 나니아 파괴 레기온 자동화 프로그램
 
-## 디렉터리 구조
+WinForms 를 사용하여 UI 가 제작된 버전
 
-```text
-.
-├─ src/
-│  └─ Collector.Console/
-│     ├─ Program.cs
-│     ├─ Program.Commands.cs
-│     ├─ Program.Data.cs
-│     ├─ Program.ListAndExcel.cs
-│     └─ Program.Web.cs
-├─ AION.WinForms/
-│  ├─ Program.cs
-│  └─ Forms/
-│     └─ MainForm/
-│        ├─ MainForm.cs
-│        ├─ MainForm.Process.cs
-│        ├─ MainForm.Settings.cs
-│        ├─ MainForm.TargetDialog.cs
-│        └─ MainForm.IO.cs
-├─ AION.Collector.csproj
-├─ AION.WinForms/AION.WinForms.csproj
-└─ AION.sln
-```
-
-## 실행/빌드
-
-```powershell
-# 콘솔
-$env:DOTNET_CLI_HOME = (Resolve-Path .dotnet_home).Path
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
-dotnet build .\AION.Collector.csproj -c Debug -p:UseSharedCompilation=false
-
-```
 ## 배포
-dotnet publish .\AION.Collector.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
-dotnet publish .\AION.WinForms\AION.WinForms.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
-
-## 참고 자료
-https://docs.google.com/spreadsheets/d/1apppLkRRVOsc1mTn_86CAdf8P4P5UOIf2X6YLRQ43P0/edit?gid=1035406315#gid=1035406315
-```
-
-
-# WinForms
-$env:DOTNET_CLI_HOME = (Resolve-Path .dotnet_home).Path
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
-dotnet build .\AION.WinForms\AION.WinForms.csproj -c Debug -p:UseSharedCompilation=false
-```
-
-## 참고
-곧 내부 전투력 시스템이 도입됨에 따라 추후 해당 버전으로 변경 예정
-
-
+.\release.ps1 make  
+.\release.ps1 clean
