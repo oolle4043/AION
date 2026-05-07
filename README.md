@@ -38,7 +38,7 @@ dotnet build .\AION.Collector.csproj -c Debug -p:UseSharedCompilation=false
 
 ```
 ## 배포
-dotnet publish .\AION.Collector.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
+dotnet publish .\AION.Collector.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기\n
 dotnet publish .\AION.WinForms\AION.WinForms.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
 
 ## 참고 자료
