@@ -38,15 +38,10 @@ dotnet build .\AION.Collector.csproj -c Debug -p:UseSharedCompilation=false
 
 ```
 ## 배포
-dotnet publish .\AION.Collector.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
-dotnet publish .\AION.WinForms\AION.WinForms.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
+.\release.ps1 make
+.\release.ps1 clean
 
-# WinForms
-$env:DOTNET_CLI_HOME = (Resolve-Path .dotnet_home).Path
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
-dotnet build .\AION.WinForms\AION.WinForms.csproj -c Debug -p:UseSharedCompilation=false
-```
-
+## 버전
 - `AION_ver.1.0`
   - 기존 WinForms 기반 버전
   - WPF 전환 전 마지막 구조와 코드를 보관
@@ -54,3 +49,6 @@ dotnet build .\AION.WinForms\AION.WinForms.csproj -c Debug -p:UseSharedCompilati
 - `AION_ver.2.0`
   - WPF 전환 버전
   - 기존 기능을 유지하면서 WPF 실행 프로젝트를 추가한 최신 구조
+
+- `AION_Party.1.0`
+  - 루드라 공대 파티 매칭 프로그램
