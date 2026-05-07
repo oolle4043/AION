@@ -26,8 +26,8 @@ dotnet run --project .\AION.Party.csproj
 또는 배포 파일을 만든 뒤 실행합니다.
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\release.ps1 make
-.\publish\AION.Party.exe
+.\release.ps1 make  
+.\release.ps1 clean
 ```
 
 결과 파일:
