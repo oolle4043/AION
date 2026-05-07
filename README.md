@@ -38,13 +38,8 @@ dotnet build .\AION.Collector.csproj -c Debug -p:UseSharedCompilation=false
 
 ```
 ## 배포
-dotnet publish .\AION.Collector.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기\n
+dotnet publish .\AION.Collector.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
 dotnet publish .\AION.WinForms\AION.WinForms.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o .\파괴아툴수집기
-
-## 참고 자료
-https://docs.google.com/spreadsheets/d/1apppLkRRVOsc1mTn_86CAdf8P4P5UOIf2X6YLRQ43P0/edit?gid=1035406315#gid=1035406315
-```
-
 
 # WinForms
 $env:DOTNET_CLI_HOME = (Resolve-Path .dotnet_home).Path
