@@ -13,5 +13,5 @@
   - 루드라 공대 파티 매칭 프로그램
 
 ## 배포
-.\release.ps1 make
+.\release.ps1 make  
 .\release.ps1 clean
