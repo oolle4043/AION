@@ -2,18 +2,14 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>AION.Party</AssemblyName>
     <UseWPF>true</UseWPF>
-    <AssemblyName>&#xD30C;&#xAD34;&#xC544;&#xD234;&#xC218;&#xC9D1;&#xAE30;</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\list.txt" Link="list.txt">
+    <Content Include="list.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
